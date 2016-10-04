@@ -714,11 +714,11 @@
             "value" : {
               "networkInterfaces":[
                 {
-                  "id":"[reference('Microsoft.Resources/deployments/SettingUpPrimaryNic',variables('apiVersion')).outputs.nicRef.value]",
+                  "id":"[resourceId('Microsoft.Network/networkInterfaces/', variables('nicPrimaryName'))]",
                   "properties":{ "primary":true }
                 },
                 {
-                  "id":"[reference('Microsoft.Resources/deployments/SettingUpSecondaryNic',variables('apiVersion')).outputs.nicRef.value]",
+                  "id":"[resourceId('Microsoft.Network/networkInterfaces/', variables('nicSecondaryName'))]",
                   "properties":{ "primary":false }
                 }
               ]
