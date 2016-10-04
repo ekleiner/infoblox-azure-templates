@@ -277,9 +277,11 @@
     "version": "[parameters('niosVersion')]",
     "OSDiskName":"[parameters('vmName')]",
     "vmStorageAccountContainerName":"disks",
-    "vnetID":"[resourceId('Microsoft.Network/virtualNetworks', parameters('virtualNetworkName'))]",
-    "subnet1Ref":"[concat(variables('vnetID'),'/subnets/', parameters('subnet1Name'))]",
-    "subnet2Ref":"[concat(variables('vnetID'),'/subnets/', parameters('subnet2Name'))]",
+    "vnetResourceId":"[variables(concat('vnet-',parameters('vnetNewOrExisting')))]",
+    "vnet-new":"[resourceId('Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+    "vnet-existing":"[resourceId(parameters('virtualNetworkExistingRGName'),'Microsoft.Network/virtualNetworks',parameters('virtualNetworkName'))]",
+    "subnet1ResourceId":"[concat(variables('vnetResourceId'),'/subnets/',parameters('subnet1Name'))]",
+    "subnet2ResourceId":"[concat(variables('vnetResourceId'),'/subnets/',parameters('subnet2Name'))]",
     "nsgName": "[concat(parameters('vmName'),'-securityGroup')]",
     "nicPrimaryName": "[concat(parameters('vmName'),'-lan1')]",
     "nicSecondaryName": "[concat(parameters('vmName'),'-mgmt')]",
@@ -564,7 +566,7 @@
             "value":"[parameters('subnet1StartAddress')]"
           },
           "subnetId":{
-            "value":"[reference('Microsoft.Resources/deployments/SettingUpVirtualNetwork',variables('apiVersion')).outputs.subnet1Ref.value]"
+            "value":"[variables('subnet1ResourceId')]"
           },
           "publicIPAddressId":{
             "value":"[variables('publicIpResourceId')]"
@@ -600,7 +602,7 @@
             "value":"[parameters('subnet2StartAddress')]"
           },
           "subnetId":{
-            "value":"[reference('Microsoft.Resources/deployments/SettingUpVirtualNetwork',variables('apiVersion')).outputs.subnet2Ref.value]"
+            "value":"[variables('subnet2ResourceId')]"
           },
           "networkSecurityGroupId":{
             "value":"[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
