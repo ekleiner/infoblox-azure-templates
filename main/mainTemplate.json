@@ -284,6 +284,10 @@
     "nicPrimaryName": "[concat(parameters('vmName'),'-lan1')]",
     "nicSecondaryName": "[concat(parameters('vmName'),'-mgmt')]",
     "publicIPExistingOrNone": "[replace(parameters('publicIPNewOrExistingOrNone'), 'new', 'existing')]",
+    "publicIpResourceId":"[variables(concat('publicIp-',parameters('publicIPNewOrExistingOrNone')))]",
+    "publicIp-new": "[resourceId(concat('Microsoft.Network','/','publicIPAddresses'),parameters('publicIPAddressName'))]",
+    "publicIp-existing": "[resourceId(parameters('publicIPExistingRGName'),concat('Microsoft.Network','/','publicIPAddresses'),parameters('publicIPAddressName'))]",
+    "publicIp-none": "",
     "apiVersion":"2016-06-01",
     "publicIPAddressType":"Dynamic",
     "adminUsername":"azureuser",
@@ -563,7 +567,7 @@
             "value":"[reference('Microsoft.Resources/deployments/SettingUpVirtualNetwork',variables('apiVersion')).outputs.subnet1Ref.value]"
           },
           "publicIPAddressId":{
-            "value":"[reference('SettingUpPublicIP').outputs.publicIpId.value]"
+            "value":"[variables('publicIpResourceId')]"
           },
           "networkSecurityGroupId":{
             "value":"[resourceId('Microsoft.Network/networkSecurityGroups', variables('nsgName'))]"
